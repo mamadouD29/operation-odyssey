@@ -5,6 +5,7 @@ import { globalStyles } from "../../styles/globalStyles";
 interface ResultDisplay {
 	result: number;
 	bg?: string;
+	
 }
 
 export function ResultDisplay({ result, bg }: ResultDisplay) {

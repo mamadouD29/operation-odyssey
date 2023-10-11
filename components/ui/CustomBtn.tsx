@@ -3,15 +3,20 @@ import React from "react";
 import { globalStyles } from "../../styles/globalStyles";
 
 interface CustomBtnProps {
-    title: string;
-	onPress: ()=>void;
+	title: string;
+	onPress: () => void;
+	brdw?: number;
 }
 
-export function CustomBtn({ title, onPress }: CustomBtnProps) {
+export function CustomBtn({ title, onPress, brdw }: CustomBtnProps) {
 	return (
 		<Pressable
 			onPress={onPress}
-			style={({ pressed }) => [globalStyles.hCtr, styles.btn,{ opacity: pressed ? 0.3 : 1, }]}
+			style={({ pressed }) => [
+				globalStyles.hCtr,
+				styles.btn,
+				{ opacity: pressed ? 0.3 : 1, borderWidth: brdw ?? 0 },
+			]}
 		>
 			<Text style={[globalStyles.inp]}>{title}</Text>
 		</Pressable>
@@ -26,5 +31,5 @@ const styles = StyleSheet.create({
 		gap: 5,
 		borderRadius: 5,
 		padding: 5,
-	}
+	},
 });

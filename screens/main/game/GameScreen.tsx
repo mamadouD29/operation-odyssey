@@ -39,7 +39,7 @@ export function GameScreen({ route }: NavigationAndRouteProps) {
 			<View style={[globalStyles.hCtr, styles.digitCtr]}>
 				{inp &&
 					inp.map((nbr: number, id: number) => (
-						<DigitBtn id={id} nbr={nbr} />
+						<DigitBtn key={id} nbr={nbr} />
 					))}
 			</View>
 		</View>

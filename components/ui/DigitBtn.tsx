@@ -3,11 +3,10 @@ import React from "react";
 import { globalStyles } from "../../styles/globalStyles";
 
 interface DigitBtnProps {
-	id: number;
 	nbr: number;
 }
 
-export function DigitBtn({ id, nbr }: DigitBtnProps) {
+export function DigitBtn({ nbr }: DigitBtnProps) {
 	return (
 		<Pressable
 			style={({ pressed }) => [
