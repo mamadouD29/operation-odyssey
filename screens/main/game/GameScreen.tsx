@@ -28,12 +28,13 @@ export function GameScreen({ route }: NavigationAndRouteProps) {
 	const [result, setResult] = useState<number>(() =>
 		initializedResult(title),
 	);
+	const [disabledBtn, setDisabledBtn] = useState<Set<number>>(initializedSet);
 
 	const resetHandler = () => {
 		setLevel(initialLevel);
 		getShuffler();
+		setDisabledBtn(initializedSet);
 	};
-
 
 	const getShuffler = () => {
 		const mySet = new Set<number>();
@@ -55,10 +56,20 @@ export function GameScreen({ route }: NavigationAndRouteProps) {
 		console.log("whole rand number: ", myNumbers);
 	};
 
-
 	useEffect(() => {
 		getShuffler();
 	}, [title]);
+
+	const handleNbrPress = (id: number, val: number) => {
+		console.log("id: ", id, "val: ", val);
+		const newSet = new Set<number>(disabledBtn);
+		if(newSet.size >= 3) {
+			resetHandler();
+			return ;
+		}
+		newSet.add(id);
+		setDisabledBtn(newSet);
+	};
 
 	return (
 		<View
@@ -80,7 +91,11 @@ export function GameScreen({ route }: NavigationAndRouteProps) {
 					inp.map((nbr: number, id: number) => (
 						<DigitBtn
 							key={id}
+							id={id}
+							onPress={handleNbrPress}
 							nbr={title === "Subtraction" ? -nbr : nbr}
+							toDisable={disabledBtn}
+							bg={bg}
 						/>
 					))}
 			</View>
