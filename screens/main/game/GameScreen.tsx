@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { NavigationAndRouteProps } from "../../../services/utils/navigations";
 import { globalStyles } from "../../../styles/globalStyles";
 import {
@@ -8,18 +8,57 @@ import {
 	InpDisplay,
 	ResultDisplay,
 } from "../../../components/ui";
+import {
+	getRandomIntInclusive,
+	getResult,
+} from "../../../services/utils/index";
 
 const initialLevel = 1;
+const initializedSet = new Set<number>();
+
+const initializedResult = (title: string) => {
+	if (title === "Multiplication" || title === "Division") return 1;
+	return 0;
+};
 
 export function GameScreen({ route }: NavigationAndRouteProps) {
 	const { id, title, bg } = route.params;
 	const [inp, setInput] = useState<number[]>([10, 22, 19, 3]);
 	const [level, setLevel] = useState<number>(initialLevel);
+	const [result, setResult] = useState<number>(() =>
+		initializedResult(title),
+	);
 
 	const resetHandler = () => {
-		console.log("digit : ");
 		setLevel(initialLevel);
+		getShuffler();
 	};
+
+
+	const getShuffler = () => {
+		const mySet = new Set<number>();
+		const myNumbers: number[] = [];
+		while (mySet.size < 4) {
+			const randNber: number = getRandomIntInclusive(1, 10);
+			if (mySet.has(randNber)) {
+				console.log("the number exists: ", randNber);
+			} else {
+				mySet.add(randNber);
+				myNumbers.push(randNber);
+				console.log("added number : ", randNber);
+			}
+		}
+		const rslt = getResult(title, myNumbers);
+		setResult(rslt);
+		setInput(myNumbers);
+
+		console.log("whole rand number: ", myNumbers);
+	};
+
+
+	useEffect(() => {
+		getShuffler();
+	}, [title]);
 
 	return (
 		<View
@@ -32,14 +71,17 @@ export function GameScreen({ route }: NavigationAndRouteProps) {
 				</View>
 			</View>
 			<View style={[styles.outpCtr]}>
-				<ResultDisplay result={35} bg={bg} />
+				<ResultDisplay result={result} bg={bg} />
 				<InpDisplay inp={0} />
 			</View>
 
 			<View style={[globalStyles.hCtr, styles.digitCtr]}>
 				{inp &&
 					inp.map((nbr: number, id: number) => (
-						<DigitBtn key={id} nbr={nbr} />
+						<DigitBtn
+							key={id}
+							nbr={title === "Subtraction" ? -nbr : nbr}
+						/>
 					))}
 			</View>
 		</View>
